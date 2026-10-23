@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { globalTokenRules, scopeThemeTokens, scopeTokens } from '../src/build/token-scope.js';
+import { cssRules, globalTokenRules, scopeThemeTokens, scopeTokens, stripCssComments } from '../src/build/token-scope.js';
 import { THEME_SCOPES } from '../src/theme.js';
 
 const CSS = [
@@ -95,6 +95,37 @@ describe('the one-pass scanner matches the regexes it replaced', () => {
       for (let j = rand(16); j > 0; j--) css += pieces[rand(pieces.length)];
       expect(globalTokenRules(css), css).toEqual(refRules(css));
       expect(scopeTokens(css, '[s]'), css).toBe(refScope(css, '[s]'));
+    }
+  });
+});
+
+describe('cssRules and stripCssComments', () => {
+  const RULE = /([^{}]+)\{([^{}]*)\}/g;
+  const COMMENT = /\/\*[\s\S]*?\*\//g;
+  const pieces = ['{', '}', '/*', '*/', '/', '*', 'a', ' ', ':root', '--x:1;', '@m{'];
+  let seed = 11;
+  const rand = (n: number) => {
+    seed = (seed + 0x6d2b79f5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) % n;
+  };
+
+  it('give exactly the matches of the regexes they replace, on 50,000 random inputs', () => {
+    for (let i = 0; i < 50_000; i++) {
+      let css = '';
+      for (let j = rand(16); j > 0; j--) css += pieces[rand(pieces.length)];
+      expect(stripCssComments(css), css).toBe(css.replace(COMMENT, ''));
+      const want = [...css.matchAll(RULE)].map((m) => ({ start: m.index, end: m.index + m[0].length, selector: m[1], body: m[2] }));
+      expect(cssRules(css), css).toEqual(want);
+    }
+  });
+
+  it('finish hostile inputs in under 50 ms', () => {
+    for (const css of [`/${'a/'.repeat(100_000)}`, 'z'.repeat(100_000), `/*${'a/*'.repeat(100_000)}`]) {
+      const start = performance.now();
+      cssRules(stripCssComments(css));
+      expect(performance.now() - start).toBeLessThan(50);
     }
   });
 });
