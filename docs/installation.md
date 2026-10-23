@@ -7,11 +7,11 @@ How a repository installs the kernel, and what the install does.
 The kernel is not published to npm. Consumers install a tag directly:
 
 ```bash
-npm install "git+https://github.com/ichava/js-ui-kernel.git#v0.1.1"
+npm install "git+https://github.com/ichava/js-ui-kernel.git#v0.1.2"
 ```
 
 That writes a dependency such as
-`"@ichava/js-ui-kernel": "git+https://github.com/ichava/js-ui-kernel.git#v0.1.1"` into
+`"@ichava/js-ui-kernel": "git+https://github.com/ichava/js-ui-kernel.git#v0.1.2"` into
 `package.json`. Pin a tag, never a branch: a branch moves under every install.
 
 ## What the install runs
