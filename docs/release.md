@@ -11,15 +11,23 @@ Commit subjects decide which. The minor moves in lockstep with the other coupled
 
 ## Cutting a release
 
-1. Open a release pull request that does three things together:
-   - moves the `[Unreleased]` section of `CHANGELOG.md` under a `## [X.Y.Z]` heading (the release
-     workflow publishes that section as the release body and refuses a tag without one);
-   - sets `"version"` in `package.json` to `X.Y.Z`;
-   - updates the `#vX.Y.Z` install lines in `README.md` and `docs/installation.md`.
+release-please opens the release pull request; see `.github/workflows/release-please.yml`.
 
-   `v0.1.1` was first tagged with `package.json` still at `0.1.0`; the version field is part of
-   the release, not a follow-up.
-2. Tag the merge commit on `main` as `vX.Y.Z` and push the tag.
+1. Every pull request that changes behaviour adds to the one `## [Unreleased]` section of
+   `CHANGELOG.md`, and uses a Conventional Commit subject.
+2. Run *Release Please* from the Actions tab (it also runs every Monday). It opens or refreshes one
+   release pull request that bumps `package.json` and `.release-please-manifest.json`, plus the `#vX.Y.Z` install lines in
+   `README.md` and `docs/installation.md` (each carries an `x-release-please-version` marker), and
+   closes `[Unreleased]` as `## [X.Y.Z] - date` on that branch. It fails when `[Unreleased]` is empty.
+3. Merge the release pull request once CI is green. That run tags `vX.Y.Z` and creates the release;
+   the tag starts `release.yml`, which publishes the changelog section as the body.
+
+Never edit the release pull request by hand: release-please rebuilds its branch and drops anything
+it did not write. Change the notes on `main` instead. If a tag ever starts nothing, run
+`gh workflow run release.yml --ref vX.Y.Z`; it refuses any ref that is not a release tag.
+
+`v0.1.1` was once tagged with `package.json` still at `0.1.0`; release-please moves the version
+field in the same pull request, so that cannot recur.
 
 ## Moving consumers
 
