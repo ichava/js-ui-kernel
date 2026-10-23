@@ -11,8 +11,14 @@ Commit subjects decide which. The minor moves in lockstep with the other coupled
 
 ## Cutting a release
 
-1. Move the `[Unreleased]` section of `CHANGELOG.md` under a `## [X.Y.Z]` heading. The release
-   workflow publishes that section as the release body and refuses a tag without one.
+1. Open a release pull request that does three things together:
+   - moves the `[Unreleased]` section of `CHANGELOG.md` under a `## [X.Y.Z]` heading (the release
+     workflow publishes that section as the release body and refuses a tag without one);
+   - sets `"version"` in `package.json` to `X.Y.Z`;
+   - updates the `#vX.Y.Z` install lines in `README.md` and `docs/installation.md`.
+
+   `v0.1.1` was first tagged with `package.json` still at `0.1.0`; the version field is part of
+   the release, not a follow-up.
 2. Tag the merge commit on `main` as `vX.Y.Z` and push the tag.
 
 ## Moving consumers

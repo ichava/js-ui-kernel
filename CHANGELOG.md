@@ -4,6 +4,10 @@ All notable changes to `@ichava/js-ui-kernel` follow [Keep a Changelog](https://
 
 ## [Unreleased]
 
+### Fixed
+
+- `package.json` says `0.1.1`, the version tagged, and the install lines in the README and `docs/installation.md` pin `#v0.1.1`. `docs/release.md` now makes the version field part of every release pull request.
+
 ## [0.1.1] - 2026-10-23
 
 ### Added

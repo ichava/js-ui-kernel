@@ -15,7 +15,7 @@ Plain TypeScript, no runtime dependencies, no framework. Node 22 or newer for th
 From a git tag, as the Ichava packages consume it:
 
 ```bash
-npm install "git+https://github.com/ichava/js-ui-kernel.git#v0.1.0"
+npm install "git+https://github.com/ichava/js-ui-kernel.git#v0.1.1"
 ```
 
 `prepare` builds `dist/` during the install.
