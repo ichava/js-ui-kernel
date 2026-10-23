@@ -4,8 +4,6 @@ All notable changes to `@ichava/js-ui-kernel` follow [Keep a Changelog](https://
 
 ## [Unreleased]
 
-## [0.1.0] - 2026-10-23
-
 ### Added
 
 - **The domain modules** (React UI architecture, step 1.1), moved from react-icon-browser's `src/core` and react-landingpage's copies, with no change to any output:
@@ -18,6 +16,11 @@ All notable changes to `@ichava/js-ui-kernel` follow [Keep a Changelog](https://
   - `@ichava/js-ui-kernel/build`: `globalTokenRules`, `scopeTokens` and the `scopeThemeTokens(scope)` Vite plugin, typed structurally so the kernel needs no Vite dependency. The rule and comment scanning is one linear pass instead of the two regexes the browser's script used, which CodeQL flagged as polynomial on hostile input (`js/polynomial-redos`): a 60,000-character brace-free string took 4.4 s and a run of `a/*` 10.3 s, and both now finish in milliseconds. 50,000 random fragments give the same output as the old regexes, and three planted scanner bugs each fail that comparison.
 - **A parity table** (`tests/fixtures/theme-parity.json`): today's `themeVars` and the landing's accent text for every shipped accent in both themes, captured from the code the module replaces. The kernel must reproduce every value; changing one step of the landing rule fails 9 cases, nudging one token fails 10. `scopeTokens` and `globalTokenRules` were also compared with the browser's script on all seven stylesheets of both packages, for both scopes: identical.
 - Reference pages for each module under `docs/tools/`.
+
+## [0.1.0] - 2026-10-23
+
+### Added
+
 - Repository scaffold: package manifest, strict TypeScript 7 build, ESLint, Vitest, CI on
   pull requests plus a weekly run, Dependabot, release workflow, and the community health files.
 - `config/tsconfig.base.json`, the strict TypeScript base shared by react-icon-browser,
