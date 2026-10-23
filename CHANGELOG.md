@@ -4,6 +4,8 @@ All notable changes to `@ichava/js-ui-kernel` follow [Keep a Changelog](https://
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-10-23
+
 ### Added
 
 - Repository scaffold: package manifest, strict TypeScript 7 build, ESLint, Vitest, CI on
