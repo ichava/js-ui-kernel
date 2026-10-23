@@ -22,7 +22,60 @@ const DOCUMENT = /^(:root|:host|html|body)(?![\w-])/;
 /** Untitled UI's dark-mode class with nothing qualifying it. */
 const BARE_DARK = /^\.dark-mode(?![\w-])/;
 
-const RULE = /([^{}]+)\{([^{}]*)\}/g;
+interface Rule {
+  /** Offset of the rule's first selector character in the scanned text. */
+  start: number;
+  /** Offset just past its closing brace. */
+  end: number;
+  selector: string;
+  body: string;
+}
+
+/**
+ * Every flat `selector { body }` rule, in order: a non-empty run without braces, `{`, a
+ * run without braces, `}`. A block holding another block (an at-rule) is not a rule; its
+ * inner rules are. Exactly the matches of `/([^{}]+)\{([^{}]*)\}/g`, found in one pass:
+ * that regex retries from every offset of a brace-free run, which CodeQL flags as
+ * polynomial on hostile input (js/polynomial-redos).
+ */
+function rules(css: string): Rule[] {
+  const out: Rule[] = [];
+  const nextBrace = (from: number): number => {
+    for (let i = from; i < css.length; i++) if (css[i] === '{' || css[i] === '}') return i;
+    return -1;
+  };
+  let pos = 0;
+  while (pos < css.length) {
+    const open = nextBrace(pos);
+    if (open === -1) break;
+    if (css[open] === '}' || open === pos) {
+      pos = open + 1;
+      continue;
+    }
+    const close = nextBrace(open + 1);
+    if (close !== -1 && css[close] === '}') {
+      out.push({ start: pos, end: close + 1, selector: css.slice(pos, open), body: css.slice(open + 1, close) });
+      pos = close + 1;
+    } else {
+      pos = open + 1;
+    }
+  }
+  return out;
+}
+
+/** The text without its comments: `/\*[\s\S]*?\*\//g` removed, in one pass. */
+function stripComments(css: string): string {
+  let out = '';
+  let pos = 0;
+  for (;;) {
+    const open = css.indexOf('/*', pos);
+    if (open === -1) return out + css.slice(pos);
+    const close = css.indexOf('*/', open + 2);
+    if (close === -1) return out + css.slice(pos);
+    out += css.slice(pos, open);
+    pos = close + 2;
+  }
+}
 const DECLARES_PROPERTY = /(^|[;\s])--[\w-]+\s*:/;
 
 function items(selector: string): string[] {
@@ -38,9 +91,8 @@ function isAtRulePrelude(selector: string): boolean {
 
 /** Rules declaring a custom property on the document: the offending selectors. */
 export function globalTokenRules(css: string): string[] {
-  const clean = css.replace(/\/\*[\s\S]*?\*\//g, '');
   const out: string[] = [];
-  for (const [, selector = '', body = ''] of clean.matchAll(RULE)) {
+  for (const { selector, body } of rules(stripComments(css))) {
     if (isAtRulePrelude(selector) || !DECLARES_PROPERTY.test(body)) continue;
     if (items(selector).some((s) => DOCUMENT.test(s) || BARE_DARK.test(s))) out.push(selector.trim());
   }
@@ -56,18 +108,28 @@ export function globalTokenRules(css: string): string[] {
  * an attribute selector, e.g. `[data-ichava-theme]`.
  */
 export function scopeTokens(css: string, scope: string): string {
-  return css.replace(RULE, (whole: string, selector: string, body: string) => {
-    if (isAtRulePrelude(selector) || !DECLARES_PROPERTY.test(body)) return whole;
-    const list = items(selector);
-    if (!list.some((s) => DOCUMENT.test(s) || BARE_DARK.test(s))) return whole;
-    const lead = /^\s*/.exec(selector)?.[0] ?? '';
-    const mapped = list.map((s) => {
-      if (DOCUMENT.test(s)) return s.replace(DOCUMENT, scope);
-      if (BARE_DARK.test(s)) return `${scope}${s}`;
-      return s;
-    });
-    return `${lead}${[...new Set(mapped)].join(',')}{${body}}`;
+  let out = '';
+  let last = 0;
+  for (const rule of rules(css)) {
+    out += css.slice(last, rule.start) + scopeRule(rule, scope);
+    last = rule.end;
+  }
+  return out + css.slice(last);
+}
+
+/** One rule, re-targeted at `scope` when it declares a custom property on the document. */
+function scopeRule({ selector, body }: Rule, scope: string): string {
+  const whole = `${selector}{${body}}`;
+  if (isAtRulePrelude(selector) || !DECLARES_PROPERTY.test(body)) return whole;
+  const list = items(selector);
+  if (!list.some((s) => DOCUMENT.test(s) || BARE_DARK.test(s))) return whole;
+  const lead = /^\s*/.exec(selector)?.[0] ?? '';
+  const mapped = list.map((s) => {
+    if (DOCUMENT.test(s)) return s.replace(DOCUMENT, scope);
+    if (BARE_DARK.test(s)) return `${scope}${s}`;
+    return s;
   });
+  return `${lead}${[...new Set(mapped)].join(',')}{${body}}`;
 }
 
 /** The subset of a Vite/Rollup output chunk this plugin reads. */
