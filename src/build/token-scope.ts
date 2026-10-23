@@ -22,7 +22,7 @@ const DOCUMENT = /^(:root|:host|html|body)(?![\w-])/;
 /** Untitled UI's dark-mode class with nothing qualifying it. */
 const BARE_DARK = /^\.dark-mode(?![\w-])/;
 
-interface Rule {
+export interface CssRule {
   /** Offset of the rule's first selector character in the scanned text. */
   start: number;
   /** Offset just past its closing brace. */
@@ -32,14 +32,14 @@ interface Rule {
 }
 
 /**
- * Every flat `selector { body }` rule, in order: a non-empty run without braces, `{`, a
+ * Every flat `selector { body }` rule, in order, with its offsets: a non-empty run without braces, `{`, a
  * run without braces, `}`. A block holding another block (an at-rule) is not a rule; its
  * inner rules are. Exactly the matches of `/([^{}]+)\{([^{}]*)\}/g`, found in one pass:
  * that regex retries from every offset of a brace-free run, which CodeQL flags as
  * polynomial on hostile input (js/polynomial-redos).
  */
-function rules(css: string): Rule[] {
-  const out: Rule[] = [];
+export function cssRules(css: string): CssRule[] {
+  const out: CssRule[] = [];
   const nextBrace = (from: number): number => {
     for (let i = from; i < css.length; i++) if (css[i] === '{' || css[i] === '}') return i;
     return -1;
@@ -64,7 +64,7 @@ function rules(css: string): Rule[] {
 }
 
 /** The text without its comments: `/\*[\s\S]*?\*\//g` removed, in one pass. */
-function stripComments(css: string): string {
+export function stripCssComments(css: string): string {
   let out = '';
   let pos = 0;
   for (;;) {
@@ -92,7 +92,7 @@ function isAtRulePrelude(selector: string): boolean {
 /** Rules declaring a custom property on the document: the offending selectors. */
 export function globalTokenRules(css: string): string[] {
   const out: string[] = [];
-  for (const { selector, body } of rules(stripComments(css))) {
+  for (const { selector, body } of cssRules(stripCssComments(css))) {
     if (isAtRulePrelude(selector) || !DECLARES_PROPERTY.test(body)) continue;
     if (items(selector).some((s) => DOCUMENT.test(s) || BARE_DARK.test(s))) out.push(selector.trim());
   }
@@ -110,7 +110,7 @@ export function globalTokenRules(css: string): string[] {
 export function scopeTokens(css: string, scope: string): string {
   let out = '';
   let last = 0;
-  for (const rule of rules(css)) {
+  for (const rule of cssRules(css)) {
     out += css.slice(last, rule.start) + scopeRule(rule, scope);
     last = rule.end;
   }
@@ -118,7 +118,7 @@ export function scopeTokens(css: string, scope: string): string {
 }
 
 /** One rule, re-targeted at `scope` when it declares a custom property on the document. */
-function scopeRule({ selector, body }: Rule, scope: string): string {
+function scopeRule({ selector, body }: CssRule, scope: string): string {
   const whole = `${selector}{${body}}`;
   if (isAtRulePrelude(selector) || !DECLARES_PROPERTY.test(body)) return whole;
   const list = items(selector);

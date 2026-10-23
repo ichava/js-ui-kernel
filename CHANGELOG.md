@@ -4,6 +4,10 @@ All notable changes to `@ichava/js-ui-kernel` follow [Keep a Changelog](https://
 
 ## [Unreleased]
 
+### Added
+
+- **`cssRules(css)` and `stripCssComments(css)` at `@ichava/js-ui-kernel/build`**: the linear scanner `scopeTokens` already used, exported so the React packages' library-build checks can drop the regexes CodeQL flags as polynomial. 50,000 random inputs give exactly the regexes' matches, and hostile inputs (100,000 repetitions of `a/`, `z` or `a/*`) finish in under 50 ms.
+
 ## [0.1.1] - 2026-10-23
 
 ### Added
