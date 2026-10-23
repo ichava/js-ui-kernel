@@ -27,6 +27,10 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
+    "./build": {
+      "types": "./dist/build/token-scope.d.ts",
+      "import": "./dist/build/token-scope.js"
+    },
     "./package.json": "./package.json"
   },
   "files": [
