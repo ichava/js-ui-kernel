@@ -4,6 +4,8 @@ All notable changes to `@ichava/js-ui-kernel` follow [Keep a Changelog](https://
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-10-23
+
 ### Added
 
 - **The domain modules** (React UI architecture, step 1.1), moved from react-icon-browser's `src/core` and react-landingpage's copies, with no change to any output:
