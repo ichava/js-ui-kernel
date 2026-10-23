@@ -37,6 +37,16 @@ curl -fsSLo scripts/check-config-drift.mjs \
 
 ### Usage
 
+The runtime modules are plain functions and value objects:
+
+```ts
+import { Translator, brandText, readableOn, toTreatment } from '@ichava/js-ui-kernel';
+
+const t = Translator.of(MESSAGES).locale('sw');
+const text = brandText('#7c3aed', 'dark');
+const treatment = toTreatment('dual'); // 'duotone'
+```
+
 Extend the base from your own tsconfig, keeping `paths` local:
 
 ```jsonc
@@ -73,6 +83,16 @@ folder until the hosted site exists.
 - [Configuration](docs/configuration.md) — the three canonical files and the drift check
 - [Architecture](docs/architecture.md) — what belongs in the kernel, and what does not
 - [Release](docs/release.md) — tagging, and how consumers move to a new tag
+
+### Reference
+
+- [Catalog model](docs/tools/catalog-model.md) — the icon, package and catalog types and `toIcon`
+- [Colour](docs/tools/color.md) — hex parsing, WCAG contrast and `readableOn`
+- [Theme](docs/tools/theme.md) — theme resolution, `themeVars`, `brandText` and the theme scopes
+- [Translation engine](docs/tools/i18n.md) — `Translator`, the locale list and text direction
+- [Locale handoff](docs/tools/locale-handoff.md) — the shared `ichava.locale` key
+- [Treatment](docs/tools/treatment.md) — one vocabulary for the five icon treatments
+- [Token scope](docs/tools/token-scope.md) — the CSS build step at `@ichava/js-ui-kernel/build`
 
 ## Contributing and security
 

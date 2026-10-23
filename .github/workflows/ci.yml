@@ -55,8 +55,17 @@ jobs:
 
       # The build is what a consumer installing by git tag receives. An empty dist/
       # would install cleanly and fail at the consumer's first import.
-      - name: Build emitted the entry point and its declarations
-        run: test -s dist/index.js && test -s dist/index.d.ts
+      - name: Build emitted the entry points and their declarations
+        run: |
+          for f in dist/index.js dist/index.d.ts dist/build/token-scope.js dist/build/token-scope.d.ts; do
+            test -s "$f" || { echo "::error::$f is missing or empty"; exit 1; }
+          done
+          # A `.ts` specifier in an emitted file names a source that is not shipped, so
+          # a consumer's import fails. Sources import siblings as `.js`.
+          if grep -rnE "from '\./[^']+\.ts'" dist; then
+            echo "::error::an emitted file imports a .ts path that does not exist in dist/"
+            exit 1
+          fi
 
   lint:
     name: Lint

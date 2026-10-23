@@ -9,7 +9,7 @@ page run on one origin and must agree on a few things exactly: the catalog model
 and the shared locale key, the accent-to-token maths, and the theme-scope attribute. Every
 divergence measured between the two packages sat in that set, so that set is the kernel.
 
-Planned modules, landing in later releases:
+The modules, one page each under [Reference](../README.md#documentation):
 
 | Module | Contents |
 |---|---|
@@ -19,6 +19,7 @@ Planned modules, landing in later releases:
 | `i18n` | The translation engine and the locale list. Message catalogs stay in each package |
 | `locale-handoff` | The shared `ichava.locale` key |
 | `treatment` | One vocabulary for icon treatments |
+| `build` | The CSS token-scope step, at `@ichava/js-ui-kernel/build` |
 
 ## What does not
 
