@@ -18,6 +18,7 @@ The modules, one page each under [Reference](../README.md#documentation):
 | `theme` | Token derivation from an accent, theme resolution, the theme-scope attribute |
 | `i18n` | The translation engine and the locale list. Message catalogs stay in each package |
 | `locale-handoff` | The shared `ichava.locale` key |
+| `consent` | The site-wide `ichava.consent` answer and the single consent notice |
 | `treatment` | One vocabulary for icon treatments |
 | `build` | The CSS token-scope step, at `@ichava/js-ui-kernel/build` |
 

@@ -91,6 +91,7 @@ folder until the hosted site exists.
 - [Theme](docs/tools/theme.md) — theme resolution, `themeVars`, `brandText` and the theme scopes
 - [Translation engine](docs/tools/i18n.md) — `Translator`, the locale list and text direction
 - [Locale handoff](docs/tools/locale-handoff.md) — the shared `ichava.locale` key
+- [Consent](docs/tools/consent.md) — the site-wide `ichava.consent` answer and the one-notice-per-page claim
 - [Treatment](docs/tools/treatment.md) — one vocabulary for the five icon treatments
 - [Token scope](docs/tools/token-scope.md) — the CSS build step at `@ichava/js-ui-kernel/build`
 
