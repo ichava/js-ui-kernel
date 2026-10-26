@@ -1,6 +1,6 @@
 {
   "name": "@ichava/js-ui-kernel",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Framework-agnostic domain kernel and shared TypeScript configuration for the Ichava UI packages.",
   "license": "MIT",
   "author": "Simtabi LLC <opensource@simtabi.com> (https://simtabi.com)",
