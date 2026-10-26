@@ -4,6 +4,8 @@ All notable changes to `@ichava/js-ui-kernel` follow [Keep a Changelog](https://
 
 ## [Unreleased]
 
+## [0.1.3] - 2026-10-26
+
 ### Added
 
 - **`consent`: the site-wide consent answer**, moved from react-icon-browser's `src/core/consentShare.ts` with the same key (`ichava.consent`), values (`essential | all`) and functions: `SITE_CONSENT_KEY`, `isConsent`, `loadSiteConsent`, `saveSiteConsent`, `subscribeSiteConsent`, `resolveConsent`, `claimConsentNotice`, `holdsConsentNotice`, `subscribeConsentNotice`, and the `Consent` type. Exported from the package root, so the browser, the landing page and a host's own pages share one answer and one notice. Plain TypeScript with no framework or Untitled UI code. Additive: no existing export changes.
