@@ -4,6 +4,10 @@ All notable changes to `@ichava/js-ui-kernel` follow [Keep a Changelog](https://
 
 ## [Unreleased]
 
+### Added
+
+- **`Icon.path` and `Icon.snippets`.** `toIcon()` now carries the wire's `icon_path` (falling back to `path`) as `Icon.path`, the `vendor/package::category/name` string Laravel resolves, and a server-rendered `snippets` map keyed by format. Both are optional and left off when the wire has none, so existing `Icon` producers keep compiling. The icon browser uses `path` to write snippets that Laravel can render, and shows a server snippet in place of its own when one is sent.
+
 ## [0.1.3] - 2026-10-26
 
 ### Added

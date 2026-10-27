@@ -31,4 +31,17 @@ describe('toIcon', () => {
     expect(svgHasOwnColors('<svg><path fill="currentColor" stroke="none"/></svg>')).toBe(false);
     expect(toIcon({ ...raw, svg_content: '<svg><rect fill="#00f"/></svg>' }).ownColor).toBe(true);
   });
+
+  it('carries the Laravel icon path, preferring icon_path over path', () => {
+    expect(toIcon({ ...raw, icon_path: 'ichava/icon-sets-tabler::outline/home', path: 'old' }).path)
+      .toBe('ichava/icon-sets-tabler::outline/home');
+    expect(toIcon({ ...raw, path: 'ichava/icon-sets-tabler::outline/home' }).path).toBe('ichava/icon-sets-tabler::outline/home');
+    expect('path' in toIcon(raw)).toBe(false);
+  });
+
+  it('carries server-rendered snippets through untouched', () => {
+    const snippets = { helper: "ichava('x')", custom: '<x-y />' };
+    expect(toIcon({ ...raw, snippets }).snippets).toEqual(snippets);
+    expect('snippets' in toIcon(raw)).toBe(false);
+  });
 });
