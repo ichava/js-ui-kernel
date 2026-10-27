@@ -25,6 +25,11 @@ export interface RawIcon {
   blade_clean?: string;
   blade_generic?: string;
   helper?: string;
+  /**
+   * Server-rendered snippets keyed by format (`helper`, `blade`, `livewire`, or a
+   * host-defined key). The browser shows one verbatim in place of its own built-in.
+   */
+  snippets?: Record<string, string>;
   set?: string;
   tags?: string[];
   keywords?: string[];
@@ -47,6 +52,13 @@ export interface Icon {
   bladeClean: string;
   bladeGeneric: string;
   helper: string;
+  /**
+   * The path Laravel resolves, `vendor/package::category/name` (the wire's `icon_path`).
+   * Absent when the source has none, such as a bundled static catalog.
+   */
+  path?: string;
+  /** Server-rendered snippets keyed by format; see `RawIcon.snippets`. */
+  snippets?: Record<string, string>;
   tags: string[];
   keywords: string[];
   /** SVG fidelity flag: own-colour icons (flags/emoji) render untouched. */
@@ -132,6 +144,8 @@ export function toIcon(raw: RawIcon): Icon {
     bladeClean: raw.blade_clean ?? '',
     bladeGeneric: raw.blade_generic ?? '',
     helper: raw.helper ?? '',
+    ...(raw.icon_path || raw.path ? { path: raw.icon_path || raw.path } : {}),
+    ...(raw.snippets ? { snippets: raw.snippets } : {}),
     tags: raw.tags ?? [],
     keywords: raw.keywords ?? [],
     ownColor: svgHasOwnColors(raw.svg_content),
