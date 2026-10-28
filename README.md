@@ -8,7 +8,7 @@ registry version to show, and lint runs in the same CI workflow as the tests.
 
 > Framework-agnostic domain kernel and shared TypeScript configuration for the Ichava UI packages.
 
-Plain TypeScript, no runtime dependencies, no framework. Node 22 or newer for the tooling.
+Plain TypeScript, no runtime dependencies, no framework. Node 24 or newer for the tooling.
 
 ## Install
 

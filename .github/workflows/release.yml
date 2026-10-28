@@ -47,7 +47,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v7
         with:
-          node-version: '22'
+          node-version: '24'
 
       # --ignore-scripts: `prepare` builds with the dev toolchain, which --omit=dev leaves
       # out. The SBOM describes what ships, and this package ships no runtime dependency.
