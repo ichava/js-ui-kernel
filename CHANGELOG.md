@@ -4,6 +4,10 @@ All notable changes to `@ichava/js-ui-kernel` follow [Keep a Changelog](https://
 
 ## [Unreleased]
 
+### Changed
+
+- Node 24 is now the minimum, up from 22. CI tests on Node 24 and 26 (the newest release), and the single-version jobs and the release run on 24, the active LTS. `engines.node` is `>=24`, and the README, installation guide and bug template say so.
+
 ## [0.1.4] - 2026-10-27
 
 ### Added

@@ -22,7 +22,7 @@ installing that dependency's dev toolchain, so the consumer receives a fresh `di
 
 ## Requirements
 
-- Node 22 or newer.
+- Node 24 or newer.
 - A bundler or runtime that understands ES modules. The package is `"type": "module"` with a
   single `import` entry.
 
