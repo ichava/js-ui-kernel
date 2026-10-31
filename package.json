@@ -1,10 +1,10 @@
 {
   "name": "@ichava/js-ui-kernel",
-  "version": "0.1.4",
+  "version": "0.1.0",
   "description": "Framework-agnostic domain kernel and shared TypeScript configuration for the Ichava UI packages.",
   "license": "MIT",
   "author": "Simtabi LLC <opensource@simtabi.com> (https://simtabi.com)",
-  "homepage": "https://github.com/ichava/js-ui-kernel#readme",
+  "homepage": "https://opensource.simtabi.com/products/ichava/js-ui-kernel",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ichava/js-ui-kernel.git"
@@ -40,6 +40,9 @@
   ],
   "engines": {
     "node": ">=24"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
