@@ -35,6 +35,14 @@ Consumers pin a tag in their git dependency. After a release, update the tag in 
 `package.json` in one pull request per repository. A release that changes a file under `config/`
 also needs the new copy in each consumer, or its drift check stays red.
 
+## Tags are final
+
+A pushed `vX.Y.Z` tag is never moved, deleted or reused: the Go module proxy, `sum.golang.org`,
+Packagist and npm keep the first copy of a tag they fetch, so a moved tag leaves them serving
+different code from git. Test a release with a pre-release tag (`vX.Y.Z-rc.N`), and retract a bad
+release and fix it forward in the next version. The full rules are in
+[CONTRIBUTING.md](../CONTRIBUTING.md#releases-and-versioning).
+
 ---
 
 [← Docs index](../README.md#documentation)
