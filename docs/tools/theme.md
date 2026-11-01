@@ -10,14 +10,17 @@ The accent-to-token derivation and theme resolution both surfaces apply, so one 
 
 `themeVars(accent, accentText, theme, radius)` returns every CSS variable a mount writes: the accent, its soft tint and ring, the Untitled UI brand ramp (`brandRamp`), the radius scale (`radiusScale`) and the brand text roles. `THEME_VAR_NAMES` lists them for removal on unmount.
 
+`themeVars` derives the brand text roles from `SURFACES`, the warm "paper and ink" ramp both UI packages paint on (sheet, muted fill and frame, per theme), so they clear 4.5:1 on each surface and on the accent's tint over each; a consumer writes no override. `LANDING_SURFACES` is the same ramp under the landing's name, and `PAGE_BG` is its first entry. The defaults are `DEFAULT_ACCENT` (lagoon teal, `#0e7c66`) and `DEFAULT_RADIUS` (6px).
+
 `brandText(accent, theme, options?)` is the brand text colour:
 
 ```ts
-import { brandText, LANDING_SURFACES, PAGE_BG, readableOn, themeVars } from '@ichava/js-ui-kernel';
+import { brandText, DEFAULT_ACCENT, DEFAULT_RADIUS, LANDING_SURFACES, PAGE_BG, readableOn, SURFACES, themeVars } from '@ichava/js-ui-kernel';
 
 brandText('#7c3aed', 'dark');                                         // the browser's rule
 brandText('#7c3aed', 'dark', { surfaces: LANDING_SURFACES.dark });   // the landing's rule
 themeVars('#7c3aed', readableOn('#7c3aed', PAGE_BG.dark), 'dark', 8);
+themeVars(DEFAULT_ACCENT, brandText(DEFAULT_ACCENT, 'light', { surfaces: SURFACES.light }), 'light', DEFAULT_RADIUS);
 ```
 
 ## Scopes
