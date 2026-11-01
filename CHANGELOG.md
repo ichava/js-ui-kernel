@@ -16,6 +16,7 @@ First release of `@ichava/js-ui-kernel`. The repository is published as a single
 
 ### Changed
 
+- **The defaults are lagoon teal (`#0e7c66`) at 6px, and contrast is measured on the warm surfaces.** `DEFAULT_ACCENT` was violet `#7c3aed`; the new `DEFAULT_RADIUS` is 6. The new `SURFACES` names the restyle's warm neutral ramp (sheet, muted fill, frame per theme) that react-icon-browser and react-landingpage paint on; `LANDING_SURFACES` is now that ramp, `PAGE_BG` its first entry, and the browser rule's tint base its frame. `themeVars` derives the three brand text roles from `SURFACES`, so they clear 4.5:1 on every surface and on the accent's tint over each, and the two UI packages can drop the surface lists and text-role overrides they carried. On the old grey surfaces the default teal measured 4.19:1 against the warm frame. `tests/theme.test.ts` checks every offered accent in both themes, and keeps the 2026-10-23 parity table for everything else `themeVars` writes.
 - Node 24 is now the minimum, up from 22. CI tests on Node 24 and 26 (the newest release), and the single-version jobs and the release run on 24, the active LTS. `engines.node` is `>=24`, and the README, installation guide and bug template say so.
 
 ## [Archived history]

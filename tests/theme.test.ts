@@ -1,11 +1,15 @@
 import { readFileSync } from 'node:fs';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { contrastRatio, readableOn } from '../src/color.js';
+import { compositeHex, contrastRatio, readableOn } from '../src/color.js';
 import {
   BRAND_RAMP,
+  DEFAULT_ACCENT,
+  DEFAULT_RADIUS,
   LANDING_SURFACES,
   PAGE_BG,
+  SOFT_ALPHA,
+  SURFACES,
   RADIUS_SCALE,
   THEME_SCOPES,
   THEME_VAR_NAMES,
@@ -29,8 +33,16 @@ type Row = { browserAccentText: string; themeVars: Record<string, string>; landi
  * Captured from the code this module replaces, at react-icon-browser and
  * react-landingpage `main` on 2026-10-23: the browser's `themeVars` (with its
  * page-background accent text) and the landing's `accentText`, for every shipped accent
- * in both themes.
+ * in both themes. Those used Untitled UI's achromatic greys, so the parity check passes
+ * them explicitly; the surfaces the kernel ships moved to the restyle's warm ramp on
+ * 2026-11-01, and only the three brand text roles `themeVars` derives from them differ.
  */
+const GREY_PAGE_BG = { light: '#ffffff', dark: '#0a0a0a' } as const;
+const GREY_SURFACES = {
+  light: ['#ffffff', '#fafafa', '#f5f5f5'],
+  dark: ['#0a0a0a', '#171717', '#262626'],
+} as const;
+const TEXT_ROLES = ['--color-fg-brand-primary', '--color-text-brand-secondary', '--color-text-brand-tertiary'];
 const PARITY = JSON.parse(readFileSync(new URL('./fixtures/theme-parity.json', import.meta.url), 'utf8')) as Record<
   string,
   Row
@@ -43,10 +55,13 @@ describe('parity with the code it replaces', () => {
 
   it.each(ACCENTS.flatMap((a) => THEMES.map((t) => [a, t] as const)))('%s in %s', (accent, theme) => {
     const row = PARITY[`${accent}/${theme}`]!;
-    const browserText = readableOn(accent, PAGE_BG[theme]);
+    const browserText = readableOn(accent, GREY_PAGE_BG[theme]);
     expect(browserText).toBe(row.browserAccentText);
-    expect(themeVars(accent, browserText, theme, 8)).toEqual(row.themeVars);
-    expect(brandText(accent, theme, { surfaces: LANDING_SURFACES[theme] })).toBe(row.landingAccentText);
+    const vars = themeVars(accent, browserText, theme, 8);
+    const rest = (v: Record<string, string>) => Object.fromEntries(Object.entries(v).filter(([k]) => !TEXT_ROLES.includes(k)));
+    expect(rest(vars)).toEqual(rest(row.themeVars));
+    for (const role of TEXT_ROLES) expect(vars[role]).toBe(brandText(accent, theme, { surfaces: SURFACES[theme] }));
+    expect(brandText(accent, theme, { surfaces: GREY_SURFACES[theme] })).toBe(row.landingAccentText);
   });
 });
 
@@ -96,7 +111,7 @@ describe('brandText', () => {
 
   it('falls back to the default accent when the landing rule gets an unparseable one', () => {
     expect(brandText('nope', 'light', { surfaces: LANDING_SURFACES.light })).toBe(
-      brandText('#7c3aed', 'light', { surfaces: LANDING_SURFACES.light }),
+      brandText(DEFAULT_ACCENT, 'light', { surfaces: LANDING_SURFACES.light }),
     );
   });
 
@@ -127,4 +142,49 @@ describe('theme resolution', () => {
   it('gives the two surfaces different scopes', () => {
     expect(THEME_SCOPES.browser).not.toBe(THEME_SCOPES.landing);
   });
+});
+
+// The accents the browser offers (react-icon-browser `config.ts` accentOptions), the
+// default first.
+const OFFERED = ['#0e7c66', '#2f54d6', '#c2410c', '#7c3aed', '#be185d'];
+
+describe('defaults and the warm surfaces', () => {
+  it('opens on lagoon teal at 6px', () => {
+    expect(DEFAULT_ACCENT).toBe('#0e7c66');
+    expect(DEFAULT_RADIUS).toBe(6);
+  });
+
+  it('names the warm ramp the UI packages ship, for the page and the landing alike', () => {
+    expect(SURFACES).toEqual({
+      light: ['#ffffff', '#f6f4ee', '#ece8de'],
+      dark: ['#14120e', '#1f1c17', '#2f2b24'],
+    });
+    expect(LANDING_SURFACES).toBe(SURFACES);
+    expect(PAGE_BG).toEqual({ light: SURFACES.light[0], dark: SURFACES.dark[0] });
+  });
+
+  it('needs a measured text variant: the raw teal fails on the warm frame', () => {
+    expect(contrastRatio(DEFAULT_ACCENT, compositeHex(DEFAULT_ACCENT, SOFT_ALPHA.light, SURFACES.light[2]))).toBeLessThan(4.5);
+  });
+
+  it.each(OFFERED.flatMap((a) => THEMES.map((t) => [a, t] as const)))(
+    'themeVars brand text for %s in %s clears AA on every surface and its tint',
+    (accent, theme) => {
+      const vars = themeVars(accent, accent, theme, DEFAULT_RADIUS);
+      for (const role of TEXT_ROLES) {
+        for (const bg of SURFACES[theme]) {
+          expect(contrastRatio(vars[role]!, bg)).toBeGreaterThanOrEqual(4.5);
+          expect(contrastRatio(vars[role]!, compositeHex(accent, SOFT_ALPHA[theme], bg))).toBeGreaterThanOrEqual(4.5);
+        }
+      }
+    },
+  );
+
+  it.each(OFFERED.flatMap((a) => THEMES.map((t) => [a, t] as const)))(
+    'the browser rule for %s in %s clears AA on the tint over the frame',
+    (accent, theme) => {
+      const text = brandText(accent, theme);
+      expect(contrastRatio(text, compositeHex(accent, SOFT_ALPHA[theme], SURFACES[theme][2]))).toBeGreaterThanOrEqual(4.5);
+    },
+  );
 });

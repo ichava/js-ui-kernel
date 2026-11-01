@@ -8,8 +8,14 @@ import { compositeHex, hexToRgba, isValidHex, mixHex, readableOn } from './color
 
 export type Theme = 'light' | 'dark';
 
-/** The default accent, used when a picked one cannot be parsed. */
-export const DEFAULT_ACCENT = '#7c3aed';
+/**
+ * The default accent: lagoon teal, the 0.1.0 restyle's brand colour. Used when a picked
+ * accent cannot be parsed, and as the default both UI packages open on.
+ */
+export const DEFAULT_ACCENT = '#0e7c66';
+
+/** The default corner radius in px, the restyle's 6px. */
+export const DEFAULT_RADIUS = 6;
 
 /**
  * The attribute each surface's theme scope carries: tokens are declared on it rather
@@ -114,30 +120,39 @@ export function radiusScale(radius: number): Record<string, string> {
  * and a radius. The keys are the contract shared by `rootStyle` and the `<html>` mirror.
  */
 /**
+ * The surfaces brand text and glyphs paint on, per theme, in the warm "paper and ink"
+ * neutral ramp both UI packages ship (`styles/ichava-theme.css`): the sheet (`--bg`), the
+ * muted fill (neutral 50 / 900) and the frame (`--canvas`, neutral 100 / 800). Each is
+ * also measured with `--accent-soft` composited over it, since icons, eyebrows, badges
+ * and selected rows paint on that tint. These were Untitled UI's achromatic greys until
+ * the restyle; on the warmer frame the default teal measured 4.19:1 against them.
+ */
+export const SURFACES = {
+  light: ['#ffffff', '#f6f4ee', '#ece8de'],
+  dark: ['#14120e', '#1f1c17', '#2f2b24'],
+} as const satisfies Record<Theme, readonly string[]>;
+
+/**
  * The softest surface brand text sits on in each theme: the accent's own `--accent-soft`
- * tint over the lightest (dark theme) or darkest (light theme) neutral surface a badge or
- * a selected row can land on. Measuring against the page background alone was not enough:
+ * tint over the darkest (light theme) or lightest (dark theme) surface a badge or a
+ * selected row can land on. Measuring against the page background alone was not enough:
  * the detail dialog's pack badge is `text-brand-secondary` on `--accent-soft`, and the
  * page-background variant of `#7c3aed` measured 3.72:1 there in dark.
  */
-const TINT_BASE = { light: '#f5f5f5', dark: '#262626' } as const;
+const TINT_BASE = { light: SURFACES.light[2], dark: SURFACES.dark[2] } as const;
 
 /** The opacity of `--accent-soft`, the accent's tint, per theme. */
 export const SOFT_ALPHA = { light: 0.1, dark: 0.16 } as const;
 
 /**
- * The surfaces the landing page paints accent text and glyphs on, per theme: the
- * Untitled UI neutrals behind `--bg`, `--card`/`--surface` and `--muted2`. Each is also
- * measured with `--accent-soft` composited over it, since icons, eyebrows and badges
- * paint on that tint.
+ * The surfaces the landing page paints accent text and glyphs on (`--bg`, `--surface`,
+ * `--muted2`): the same warm ramp as `SURFACES`, kept under its own name for the
+ * landing's callers.
  */
-export const LANDING_SURFACES = {
-  light: ['#ffffff', '#fafafa', '#f5f5f5'],
-  dark: ['#0a0a0a', '#171717', '#262626'],
-} as const satisfies Record<Theme, readonly string[]>;
+export const LANDING_SURFACES = SURFACES;
 
 /** The page background each surface's text is first measured against. */
-export const PAGE_BG = { light: '#ffffff', dark: '#0a0a0a' } as const satisfies Record<Theme, string>;
+export const PAGE_BG = { light: SURFACES.light[0], dark: SURFACES.dark[0] } as const satisfies Record<Theme, string>;
 
 export interface BrandTextOptions {
   /**
@@ -171,7 +186,7 @@ export function brandText(accent: string, theme: Theme, options: BrandTextOption
 }
 
 export function themeVars(accent: string, accentText: string, theme: Theme, radius: number): Record<string, string> {
-  const text = brandText(accent, theme);
+  const text = brandText(accent, theme, { surfaces: SURFACES[theme] });
   return {
     '--accent': accent,
     '--accent-text': accentText,
@@ -186,8 +201,9 @@ export function themeVars(accent: string, accentText: string, theme: Theme, radi
     '--color-bg-brand-solid_hover': hexToRgba(accent, 0.88),
     '--color-bg-brand-primary': hexToRgba(accent, theme === 'dark' ? 0.16 : 0.1),
     '--color-border-brand': hexToRgba(accent, 0.5),
-    // TEXT roles take the variant that clears AA on the accent's own tint (`brandText`),
-    // which also clears it on the plain page. In light, Untitled UI points
+    // TEXT roles take the variant that clears AA on every surface in `SURFACES` and on the
+    // accent's own tint over each (`brandText` with the surfaces), so a consumer needs no
+    // override of its own. In light, Untitled UI points
     // text-brand-tertiary at step 600 -- the raw accent -- which fails for any light
     // accent; text-brand-primary (900) is dark enough to keep.
     '--color-fg-brand-primary': text,
