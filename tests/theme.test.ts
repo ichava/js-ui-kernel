@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { compositeHex, contrastRatio, readableOn } from '../src/color.js';
+import { FALLBACK_ACCENT_RGB, compositeHex, contrastRatio, readableOn } from '../src/color.js';
 import {
   BRAND_RAMP,
   DEFAULT_ACCENT,
@@ -187,4 +187,11 @@ describe('defaults and the warm surfaces', () => {
       expect(contrastRatio(text, compositeHex(accent, SOFT_ALPHA[theme], SURFACES[theme][2]))).toBeGreaterThanOrEqual(4.5);
     },
   );
+});
+
+describe('the malformed-accent fallback', () => {
+  it('is the default accent, so an unparseable accent tints in the colour its text is drawn in', () => {
+    const rgb = [1, 3, 5].map((i) => parseInt(DEFAULT_ACCENT.slice(i, i + 2), 16)).join(',');
+    expect(FALLBACK_ACCENT_RGB).toBe(rgb);
+  });
 });

@@ -16,8 +16,12 @@ export function hexWithAlpha(hex: string, alphaPct: number): string {
   return `${hex}${a}`;
 }
 
-/** Fallback accent, used when a caller-supplied hex cannot be parsed. */
-export const FALLBACK_ACCENT_RGB = '124,58,237';
+/**
+ * Fallback accent, used when a caller-supplied hex cannot be parsed. The RGB of
+ * `DEFAULT_ACCENT` (`#0e7c66`) in theme.ts, so a malformed accent tints in the same teal
+ * its derived text is drawn in; tests/theme.test.ts ties the two together.
+ */
+export const FALLBACK_ACCENT_RGB = '14,124,102';
 
 /**
  * Convert a 6-digit hex to `rgba()` at the given 0–1 alpha.
