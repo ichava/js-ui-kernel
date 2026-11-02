@@ -4,6 +4,10 @@ All notable changes to `@ichava/js-ui-kernel` follow [Keep a Changelog](https://
 
 ## [Unreleased]
 
+### Changed
+
+- **The kernel's size ceiling is 1,100 lines, and a test enforces it.** `docs/architecture.md` said the kernel stays under about 700 lines; it measured 1,014 across nine `src/` files, all of it shared contract (the linear CSS scanner, the consent answer, the warm surface ramp, `Icon.path` and `Icon.snippets`). No file is near 700 on its own, so the figure was a whole-kernel one. The stated ceiling now carries the measurement and the reason, and `tests/kernel-size.test.ts` counts `src/` lines (failing when it reads fewer than five files) and checks the documented number matches. No code or export changes.
+
 ## [0.1.0] - TBD
 
 First release of `@ichava/js-ui-kernel`. The repository is published as a single commit; the 0.1.x tags cut between 2026-10-23 and 2026-10-27 (v0.1.0 to v0.1.4) are folded into this release, and their notes are kept below under *Archived history*.
