@@ -113,6 +113,13 @@ jobs:
             found                    { print }
           ' CHANGELOG.md)"
 
+          # A pre-release tag (vX.Y.Z-rc.N) is a test build: it publishes as a GitHub
+          # pre-release and needs no CHANGELOG section of its own. A final tag still
+          # fails closed below.
+          if [ -z "$(printf '%s' "$SECTION" | tr -d '[:space:]')" ] && [[ "$VERSION" == *-* ]]; then
+            SECTION="Pre-release build ${GITHUB_REF_NAME}, for testing. It is not a release; the notes ship with the final v${VERSION%%-*} tag."
+          fi
+
           # Fail closed. A tag whose version has no CHANGELOG section is a tag
           # pointing at the wrong commit, or a release nobody wrote notes for —
           # both are reasons to stop, not to publish auto-generated notes and
@@ -135,6 +142,8 @@ jobs:
         with:
           body: ${{ steps.changelog.outputs.body }}
           generate_release_notes: true
+          # A `vX.Y.Z-rc.N` tag is a test build, never a release users should pick up.
+          prerelease: ${{ contains(github.ref_name, '-') }}
           files: js-ui-kernel.cdx.json
           # Explicit, though it is the action's default: a missing SBOM must not
           # fail the publish, so it must not rest on a default a reader has to know.
