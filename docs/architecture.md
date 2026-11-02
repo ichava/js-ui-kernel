@@ -27,7 +27,22 @@ The modules, one page each under [Reference](../README.md#documentation):
 - **Framework code.** React, hooks, components and stores stay in the packages.
 - **Untitled UI, free or PRO.** Vendored per package by design, and PRO source may not appear in
   a public repository at all.
-- **Anything one package uses alone.** The kernel stays under about 700 lines.
+- **Anything one package uses alone.** The kernel stays at or under 1,100 lines: every `.ts` file under
+  `src/`, counted as `wc -l` counts. `tests/kernel-size.test.ts` enforces it.
+
+## Why 1,100 lines
+
+The first ceiling read "under about 700 lines" and was a whole-kernel figure, not a per-file one; no
+source file has come near 700 on its own (the largest, `theme.ts`, is 216). By 2026-11-02 the kernel
+measured 1,014 lines across nine files, and the growth was shared contract rather than one
+package's code: the linear CSS scanner that replaced two ReDoS-prone regexes (`build`), the
+site-wide consent answer (`consent`), the warm surface ramp the brand text roles are measured
+against (`theme`), and `Icon.path` and `Icon.snippets` (`catalog-model`). Each is something the
+surfaces on one origin must agree on (a storage key, a token rule, a wire shape), which is the
+test at the top of this page, so none is a candidate to move out.
+
+The ceiling is the measurement plus a margin of under 10%, so it still forces the question on the
+next module. Raising it means changing this section and the constant in the test together.
 
 ## Why a separate public repository
 
