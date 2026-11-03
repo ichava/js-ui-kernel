@@ -6,6 +6,7 @@ All notable changes to `@ichava/js-ui-kernel` follow [Keep a Changelog](https://
 
 ### Changed
 
+- **Documentation links point at each repository's own `docs/`** (Sim, 2026-11-03: "all ichava repos have docs in their respective repos. thats by design"). Links to `opensource.simtabi.com/documentation/ichava/...` and the `opensource.simtabi.com/products/ichava/...` homepage, which answer 404 for every ichava page, now go to the matching `docs/*.md` on GitHub, or to the repository itself. Each target was checked to exist on that repository's `main`. The manifest's `homepage` and `support.docs` follow.
 - **The author and contact address is `ichava@simtabi.com`** (W-11, Sim 2026-11-03), replacing the community address `opensource@simtabi.com` wherever this repository named it. Vulnerability reports still go to `security@simtabi.com`.
 - **The kernel's size ceiling is 1,100 lines, and a test enforces it.** `docs/architecture.md` said the kernel stays under about 700 lines; it measured 1,014 across nine `src/` files, all of it shared contract (the linear CSS scanner, the consent answer, the warm surface ramp, `Icon.path` and `Icon.snippets`). No file is near 700 on its own, so the figure was a whole-kernel one. The stated ceiling now carries the measurement and the reason, and `tests/kernel-size.test.ts` counts `src/` lines (failing when it reads fewer than five files) and checks the documented number matches. No code or export changes.
 
