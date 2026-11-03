@@ -6,6 +6,7 @@ All notable changes to `@ichava/js-ui-kernel` follow [Keep a Changelog](https://
 
 ### Changed
 
+- **The author and contact address is `ichava@simtabi.com`** (W-11, Sim 2026-11-03), replacing the community address `opensource@simtabi.com` wherever this repository named it. Vulnerability reports still go to `security@simtabi.com`.
 - **The kernel's size ceiling is 1,100 lines, and a test enforces it.** `docs/architecture.md` said the kernel stays under about 700 lines; it measured 1,014 across nine `src/` files, all of it shared contract (the linear CSS scanner, the consent answer, the warm surface ramp, `Icon.path` and `Icon.snippets`). No file is near 700 on its own, so the figure was a whole-kernel one. The stated ceiling now carries the measurement and the reason, and `tests/kernel-size.test.ts` counts `src/` lines (failing when it reads fewer than five files) and checks the documented number matches. No code or export changes.
 
 ## [0.1.0] - TBD
