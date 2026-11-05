@@ -9,6 +9,10 @@ All notable changes to `@ichava/js-ui-kernel` follow [Keep a Changelog](https://
 - **The release workflow reads by default and writes only in its one job.** `release.yml` declared `contents: write` for the whole workflow; it is now `contents: read` at the top and `contents: write` on the `release` job. `actions/setup-node` there sets `package-manager-cache: false`, so a release never restores a cache an earlier run could have written (zizmor `cache-poisoning`).
 - **`minimatch` resolves to `^11.0.1` through an npm `overrides` entry.** ESLint 10 and typescript-eslint pull `minimatch` 10.2.x, inside the range of GHSA-g3hv-75wg-m249 (glob-pattern denial of service, `>=7.0.0 <11.0.1`). It is a development dependency only; `npm audit` on a freshly computed lockfile now reports 0 (it reported 10 moderate). No lock file is committed.
 
+### Added
+
+- **Canonical copies of the shared frontend tooling** in `config/tools/` (re-audit F-18): `check-consumers.mjs`, `siblings.mjs`/`.d.mts`, `prepaint.mjs`/`.d.mts`, `visual-drift.mjs` and `check-dead-links.mjs` (carried by react-icon-browser and react-landingpage under `scripts/`), and `sync-vendored-library.mjs` (icon-browser and ichava.com, under `.dev/tools/`). They were byte-identical by prose only; each consumer now lists its copies in its own `check:config-drift`, which fails on any difference. Nothing here ships in the package (`files` is `dist`). Change a file here first, then copy it into every consumer.
+
 ### Changed
 
 - **Documentation links point at each repository's own `docs/`** (Sim, 2026-11-03: "all ichava repos have docs in their respective repos. thats by design"). Links to `opensource.simtabi.com/documentation/ichava/...` and the `opensource.simtabi.com/products/ichava/...` homepage, which answer 404 for every ichava page, now go to the matching `docs/*.md` on GitHub, or to the repository itself. Each target was checked to exist on that repository's `main`. The manifest's `homepage` and `support.docs` follow.
