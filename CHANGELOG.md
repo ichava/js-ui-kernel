@@ -4,6 +4,10 @@ All notable changes to `@ichava/js-ui-kernel` follow [Keep a Changelog](https://
 
 ## [Unreleased]
 
+### Added
+
+- **`@ichava/js-ui-kernel/react`, an opt-in subpath for the UI the landing and the icon browser share.** It holds `cx`/`sortCx`, the `is*Component` checks, and the Untitled UI free `Toggle`, `RadioButton`/`RadioGroup`, `FeaturedIcon`, `AvatarCount`, `AvatarOnlineIndicator` and `VerifiedTick`, moved unchanged from ichava.com's landing except for relative imports, plus `./react/uui-theme.css`. Untitled UI React's MIT licence ships beside them as `LICENSE-untitledui`. React, react-aria-components and tailwind-merge are optional peers, and the kernel's own entry points import no React. `sideEffects` moves from `false` to `["*.css"]`, so every JavaScript file stays side-effect-free as before and only the new stylesheet is kept when imported. The subpath has its own 1,550-line ceiling and does not count against the core's 1,100; `docs/architecture.md` records the exception to "framework code stays in the packages". `tests/react.test.ts` pins the exports, the package map, the optional peers and the React-free core.
+
 ### Security
 
 - **The release workflow reads by default and writes only in its one job.** `release.yml` declared `contents: write` for the whole workflow; it is now `contents: read` at the top and `contents: write` on the `release` job. `actions/setup-node` there sets `package-manager-cache: false`, so a release never restores a cache an earlier run could have written (zizmor `cache-poisoning`).

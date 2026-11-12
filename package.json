@@ -20,7 +20,9 @@
     "framework-agnostic"
   ],
   "type": "module",
-  "sideEffects": false,
+  "sideEffects": [
+    "*.css"
+  ],
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
@@ -31,6 +33,11 @@
       "types": "./dist/build/token-scope.d.ts",
       "import": "./dist/build/token-scope.js"
     },
+    "./react": {
+      "types": "./dist/react/index.d.ts",
+      "import": "./dist/react/index.js"
+    },
+    "./react/uui-theme.css": "./dist/react/styles/uui-theme.css",
     "./package.json": "./package.json"
   },
   "files": [
@@ -45,7 +52,7 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
+    "build": "tsc -p tsconfig.build.json && node scripts/copy-react-assets.mjs",
     "prepare": "npm run build",
     "typecheck": "tsc -p tsconfig.json",
     "lint": "eslint .",
@@ -56,14 +63,34 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
     "@typescript/native": "npm:typescript@^7.0.2",
     "eslint": "^10.12.0",
     "globals": "^17.13.0",
+    "react": "^19.3.1",
+    "react-aria-components": "^1.22.1",
+    "tailwind-merge": "^3.7.0",
     "typescript": "npm:@typescript/typescript6@^6.0.2",
     "typescript-eslint": "^8.72.0",
     "vitest": "^5.0.3"
   },
   "overrides": {
     "minimatch": "^11.0.1"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-aria-components": "^1.22.0",
+    "tailwind-merge": "^3.7.0"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
+    "react-aria-components": {
+      "optional": true
+    },
+    "tailwind-merge": {
+      "optional": true
+    }
   }
 }
