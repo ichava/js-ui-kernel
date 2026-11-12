@@ -5,7 +5,7 @@ import {
     type RadioGroupProps as AriaRadioGroupProps,
     type RadioProps as AriaRadioProps,
 } from "react-aria-components";
-import { cx } from "../../utils/cx.ts";
+import { cx } from "../../utils/cx.js";
 
 export interface RadioGroupContextType {
     /** Size applied to every `RadioButton` inside the group through context, taking precedence over a `size` set on the individual radio. */

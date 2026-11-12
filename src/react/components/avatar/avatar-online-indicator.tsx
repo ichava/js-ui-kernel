@@ -1,4 +1,4 @@
-import { cx } from "../../utils/cx.ts";
+import { cx } from "../../utils/cx.js";
 
 const sizes = {
     xs: "size-1.5",

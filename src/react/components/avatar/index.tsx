@@ -1,2 +1,2 @@
-export * from "./avatar-online-indicator.tsx";
-export * from "./verified-tick.tsx";
+export * from "./avatar-online-indicator.js";
+export * from "./verified-tick.js";

@@ -9,11 +9,11 @@
  * ichava.com's resources/js/landing/ on 2026-11-12 except that their imports are relative.
  * The stylesheet they are styled by is `@ichava/js-ui-kernel/react/uui-theme.css`.
  */
-export { cx, sortCx } from './utils/cx.ts';
-export { isClassComponent, isForwardRefComponent, isFunctionComponent, isReactComponent } from './utils/is-react-component.ts';
-export { AvatarCount } from './components/avatar/avatar-count.tsx';
-export { AvatarOnlineIndicator, VerifiedTick } from './components/avatar/index.tsx';
-export { FeaturedIcon } from './components/featured-icon/featured-icon.tsx';
-export { RadioButton, RadioButtonBase, RadioGroup } from './components/radio-buttons/radio-buttons.tsx';
-export type { RadioButtonBaseProps, RadioGroupContextType } from './components/radio-buttons/radio-buttons.tsx';
-export { Toggle, ToggleBase } from './components/toggle/toggle.tsx';
+export { cx, sortCx } from './utils/cx.js';
+export { isClassComponent, isForwardRefComponent, isFunctionComponent, isReactComponent } from './utils/is-react-component.js';
+export { AvatarCount } from './components/avatar/avatar-count.js';
+export { AvatarOnlineIndicator, VerifiedTick } from './components/avatar/index.js';
+export { FeaturedIcon } from './components/featured-icon/featured-icon.js';
+export { RadioButton, RadioButtonBase, RadioGroup } from './components/radio-buttons/radio-buttons.js';
+export type { RadioButtonBaseProps, RadioGroupContextType } from './components/radio-buttons/radio-buttons.js';
+export { Toggle, ToggleBase } from './components/toggle/toggle.js';

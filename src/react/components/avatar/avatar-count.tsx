@@ -1,4 +1,4 @@
-import { cx } from "../../utils/cx.ts";
+import { cx } from "../../utils/cx.js";
 
 interface AvatarCountProps {
     count: number;
