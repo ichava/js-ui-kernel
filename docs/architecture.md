@@ -24,9 +24,31 @@ The modules, one page each under [Reference](../README.md#documentation):
 
 ## What does not
 
-- **Framework code.** React, hooks, components and stores stay in the packages.
-- **Untitled UI, free or PRO.** Vendored per package by design, and PRO source may not appear in
-  a public repository at all.
+- **Framework code.** React, hooks, components and stores stay in the packages, with one exception:
+  the opt-in `./react` subpath below.
+- **Untitled UI PRO.** Its licence forbids publishing the source, so it never appears in this public
+  repository. Free Untitled UI components stay in the packages too, except the ten in `./react`.
+
+## The `./react` subpath (2026-11-12)
+
+The landing (ichava.com) and the icon browser (icon-browser) carried byte-identical copies of ten
+free UI files, and two copies drift. The owner chose to move shared code into the kernel (react
+consolidation, Q1, 2026-11-11), so `@ichava/js-ui-kernel/react` holds them:
+
+- `cx` and `sortCx` (tailwind-merge with the Untitled UI text scale), and the `is*Component` checks;
+- the Untitled UI free `Toggle`, `RadioButton`/`RadioGroup`, `FeaturedIcon`, `AvatarCount`,
+  `AvatarOnlineIndicator` and `VerifiedTick`;
+- `./react/uui-theme.css`, the Untitled UI theme those components are styled by.
+
+The components are Untitled UI React's free components, MIT, Copyright (c) 2025 Untitled UI; the
+licence travels beside them as `LICENSE-untitledui` in `src/` and `dist/`. None carries the PRO
+header. The two other shared files, `tabs` and `dropdown`, import product-specific code (badges,
+icons, avatar, checkbox) and stay duplicated in the two packages under their drift guard.
+
+It is opt-in: the kernel's own entry points import no React, and React, react-aria-components and
+tailwind-merge are optional peers. `tests/react.test.ts` pins the export list and that separation.
+It has its own ceiling, 1,550 lines of `.ts`, `.tsx` and `.css` (measured 1,463), and does not count
+against the core's.
 - **Anything one package uses alone.** The kernel stays at or under 1,100 lines: every `.ts` file under
   `src/`, counted as `wc -l` counts. `tests/kernel-size.test.ts` enforces it.
 
