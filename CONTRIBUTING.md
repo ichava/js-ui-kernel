@@ -1,0 +1,76 @@
+# Contributing
+
+## Before you start
+
+```bash
+npm install
+npm run typecheck
+npm run lint
+npm test
+npm run build
+```
+
+All five must be clean before a pull request is opened. CI runs the same commands.
+
+## What belongs here
+
+The kernel is the contract the Ichava UI packages share: the catalog model, colour maths, theme
+tokens, the i18n engine, the locale handoff between surfaces, and the shared configuration under
+`config/`. It stays small and framework-free:
+
+- **No framework imports.** No React, no Vue, no zustand. A module that needs one belongs in the
+  package that uses it.
+- **No runtime dependencies.** A pull request that adds one has to argue for it.
+- **No Untitled UI code, free or PRO.** This repository is public and MIT. Untitled UI PRO's
+  licence forbids exposing its source in a public repository, so a PRO file here is a licence
+  breach, not a style problem.
+
+## Changing a file under `config/`
+
+Every consumer keeps a byte-identical copy, and its drift check fails the moment the canonical
+changes. So a change here is a change in every consumer:
+
+1. Merge the change here.
+2. Copy the new file into each consumer in the same sweep (icon-browser, ichava.com,
+   js-icon-components, js-motion), one pull request per repository. Each lists its copies in
+   its `check:config-drift` script. react-icon-browser and react-landingpage are retired
+   (2026-11-13): their source lives in icon-browser and ichava.com, and they take no copies.
+
+Say in the pull request which repositories need the new copy.
+
+## Conventions
+
+- Conventional Commits (`feat:`, `fix:`, `refactor:`, `chore:`, `ci:`, `test:`). Subject 72
+  characters or fewer, imperative mood. The body explains why.
+- No AI attribution anywhere: commits, pull request titles and bodies, code comments or docs.
+- Test credentials, if a test ever needs one, are generated at run time, never written down.
+- No lock files. This is a library; `package-lock.json` is gitignored.
+
+## Versioning
+
+SemVer on 0.x: a breaking change bumps the minor, everything else bumps the patch. The minor
+moves in lockstep with the other coupled Ichava packages. Do not bump the version in a feature
+pull request; releases are cut separately.
+
+## Releases and versioning
+
+- **A version tag is pushed only for final code.** `vX.Y.Z` marks a release, nothing else. To try a
+  release build first, push a pre-release tag, `vX.Y.Z-rc.N`, which uses up no release number. It runs
+  the same release workflow and publishes as a GitHub pre-release. It needs no CHANGELOG section of
+  its own: the workflow uses a `## [X.Y.Z-rc.N]` section when the commit has one, and a fixed
+  test-build note otherwise.
+- **A public tag is never moved, deleted or reused.** Once a tag has been fetched, moving it makes
+  consumers of the same version disagree. Composer and npm git dependencies resolve the tag afresh, so
+  new installs get the moved commit while every existing lockfile and cache keeps the old one (an npm
+  registry version cannot be republished at all). For a Go module, the module proxy keeps the copy it
+  first served and `sum.golang.org` records its checksum, so `go` fetches after the move fail
+  verification. The next fix gets the next number.
+- **A tag ruleset enforces this.** Applied once the v0.1.0 tags are pushed, it blocks deleting,
+  updating and force-pushing `v*` tags on this repository. The v0.1.0 publication as a
+  single commit was the one planned exception.
+- **A bad release is retracted, not replaced.** Name it in the CHANGELOG and the GitHub release notes. This package is installed from git tags, not from the npm registry; if it is ever published there, `npm deprecate` the version too. Then ship the fix as the next
+  version.
+
+## Security
+
+See [`SECURITY.md`](SECURITY.md).
