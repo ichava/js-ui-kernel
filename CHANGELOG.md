@@ -4,10 +4,6 @@ All notable changes to `@ichava/js-ui-kernel` follow [Keep a Changelog](https://
 
 ## [Unreleased]
 
-### Changed
-
-- The contributing guide, the release notes and the issue template name the current consumers: icon-browser and ichava.com hold the React sources since react consolidation 3d, and react-icon-browser and react-landingpage are retired. Comments that say where code moved from, and CHANGELOG history, are unchanged.
-
 ## [0.1.0] - 2026-11-13
 
 First release of `@ichava/js-ui-kernel`. The repository is published as a single commit; the 0.1.x tags cut between 2026-10-23 and 2026-10-27 (v0.1.0 to v0.1.4) are folded into this release, and their notes are kept below under *Archived history*.
@@ -24,6 +20,8 @@ First release of `@ichava/js-ui-kernel`. The repository is published as a single
 - Releases prepared by release-please with hand-written notes; `release.yml` publishes this section as the release body.
 
 ### Changed
+
+- The contributing guide, the release notes and the issue template name the current consumers: icon-browser and ichava.com hold the React sources since react consolidation 3d, and react-icon-browser and react-landingpage are retired. Comments that say where code moved from, and CHANGELOG history, are unchanged.
 
 - **Documentation links point at each repository's own `docs/`** (Sim, 2026-11-03: "all ichava repos have docs in their respective repos. thats by design"). Links to `opensource.simtabi.com/documentation/ichava/...` and the `opensource.simtabi.com/products/ichava/...` homepage, which answer 404 for every ichava page, now go to the matching `docs/*.md` on GitHub, or to the repository itself. Each target was checked to exist on that repository's `main`. The manifest's `homepage` and `support.docs` follow.
 - **The author and contact address is `ichava@simtabi.com`** (W-11, Sim 2026-11-03), replacing the community address `opensource@simtabi.com` wherever this repository named it. Vulnerability reports still go to `security@simtabi.com`.
