@@ -31,8 +31,10 @@ Every consumer keeps a byte-identical copy, and its drift check fails the moment
 changes. So a change here is a change in every consumer:
 
 1. Merge the change here.
-2. Copy the new file into each consumer in the same sweep (react-icon-browser,
-   react-landingpage, js-motion), one pull request per repository.
+2. Copy the new file into each consumer in the same sweep (icon-browser, ichava.com,
+   js-icon-components, js-motion), one pull request per repository. Each lists its copies in
+   its `check:config-drift` script. react-icon-browser and react-landingpage are retired
+   (2026-11-13): their source lives in icon-browser and ichava.com, and they take no copies.
 
 Say in the pull request which repositories need the new copy.
 

@@ -4,6 +4,10 @@ All notable changes to `@ichava/js-ui-kernel` follow [Keep a Changelog](https://
 
 ## [Unreleased]
 
+### Changed
+
+- The contributing guide, the release notes and the issue template name the current consumers: icon-browser and ichava.com hold the React sources since react consolidation 3d, and react-icon-browser and react-landingpage are retired. Comments that say where code moved from, and CHANGELOG history, are unchanged.
+
 ## [0.1.0] - 2026-11-13
 
 First release of `@ichava/js-ui-kernel`. The repository is published as a single commit; the 0.1.x tags cut between 2026-10-23 and 2026-10-27 (v0.1.0 to v0.1.4) are folded into this release, and their notes are kept below under *Archived history*.

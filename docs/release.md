@@ -6,7 +6,7 @@ Tagging a release, and moving consumers to it.
 
 SemVer on 0.x. A breaking change bumps the minor and everything else bumps the patch; Conventional
 Commit subjects decide which. The minor moves in lockstep with the other coupled Ichava packages
-(core, the packs, icon-browser, the scaffolder, react-icon-browser and react-landingpage), so
+(core, the packs, icon-browser and the scaffolder), so
 `^0.1` means the 0.1 line of the whole family.
 
 ## Cutting a release
