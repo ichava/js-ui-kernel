@@ -4,30 +4,16 @@ All notable changes to `@ichava/js-ui-kernel` follow [Keep a Changelog](https://
 
 ## [Unreleased]
 
-### Added
-
-- **`@ichava/js-ui-kernel/react`, an opt-in subpath for the UI the landing and the icon browser share.** It holds `cx`/`sortCx`, the `is*Component` checks, and the Untitled UI free `Toggle`, `RadioButton`/`RadioGroup`, `FeaturedIcon`, `AvatarCount`, `AvatarOnlineIndicator` and `VerifiedTick`, moved unchanged from ichava.com's landing except for relative imports, plus `./react/uui-theme.css`. Untitled UI React's MIT licence ships beside them as `LICENSE-untitledui`. React, react-aria-components and tailwind-merge are optional peers, and the kernel's own entry points import no React. `sideEffects` moves from `false` to `["*.css"]`, so every JavaScript file stays side-effect-free as before and only the new stylesheet is kept when imported. The subpath has its own 1,550-line ceiling and does not count against the core's 1,100; `docs/architecture.md` records the exception to "framework code stays in the packages". `tests/react.test.ts` pins the exports, the package map, the optional peers and the React-free core.
-
-### Security
-
-- **The release workflow reads by default and writes only in its one job.** `release.yml` declared `contents: write` for the whole workflow; it is now `contents: read` at the top and `contents: write` on the `release` job. `actions/setup-node` there sets `package-manager-cache: false`, so a release never restores a cache an earlier run could have written (zizmor `cache-poisoning`).
-- **`minimatch` resolves to `^11.0.1` through an npm `overrides` entry.** ESLint 10 and typescript-eslint pull `minimatch` 10.2.x, inside the range of GHSA-g3hv-75wg-m249 (glob-pattern denial of service, `>=7.0.0 <11.0.1`). It is a development dependency only; `npm audit` on a freshly computed lockfile now reports 0 (it reported 10 moderate). No lock file is committed.
-
-### Added
-
-- **Canonical copies of the shared frontend tooling** in `config/tools/` (re-audit F-18): `check-consumers.mjs`, `siblings.mjs`/`.d.mts`, `prepaint.mjs`/`.d.mts`, `visual-drift.mjs` and `check-dead-links.mjs` (carried by react-icon-browser and react-landingpage under `scripts/`), and `sync-vendored-library.mjs` (icon-browser and ichava.com, under `.dev/tools/`). They were byte-identical by prose only; each consumer now lists its copies in its own `check:config-drift`, which fails on any difference. Nothing here ships in the package (`files` is `dist`). Change a file here first, then copy it into every consumer.
-
-### Changed
-
-- **Documentation links point at each repository's own `docs/`** (Sim, 2026-11-03: "all ichava repos have docs in their respective repos. thats by design"). Links to `opensource.simtabi.com/documentation/ichava/...` and the `opensource.simtabi.com/products/ichava/...` homepage, which answer 404 for every ichava page, now go to the matching `docs/*.md` on GitHub, or to the repository itself. Each target was checked to exist on that repository's `main`. The manifest's `homepage` and `support.docs` follow.
-- **The author and contact address is `ichava@simtabi.com`** (W-11, Sim 2026-11-03), replacing the community address `opensource@simtabi.com` wherever this repository named it. Vulnerability reports still go to `security@simtabi.com`.
-- **The kernel's size ceiling is 1,100 lines, and a test enforces it.** `docs/architecture.md` said the kernel stays under about 700 lines; it measured 1,014 across nine `src/` files, all of it shared contract (the linear CSS scanner, the consent answer, the warm surface ramp, `Icon.path` and `Icon.snippets`). No file is near 700 on its own, so the figure was a whole-kernel one. The stated ceiling now carries the measurement and the reason, and `tests/kernel-size.test.ts` counts `src/` lines (failing when it reads fewer than five files) and checks the documented number matches. No code or export changes.
-
 ## [0.1.0] - TBD
 
 First release of `@ichava/js-ui-kernel`. The repository is published as a single commit; the 0.1.x tags cut between 2026-10-23 and 2026-10-27 (v0.1.0 to v0.1.4) are folded into this release, and their notes are kept below under *Archived history*.
 
 ### Added
+
+- **`@ichava/js-ui-kernel/react`, an opt-in subpath for the UI the landing and the icon browser share.** It holds `cx`/`sortCx`, the `is*Component` checks, and the Untitled UI free `Toggle`, `RadioButton`/`RadioGroup`, `FeaturedIcon`, `AvatarCount`, `AvatarOnlineIndicator` and `VerifiedTick`, moved unchanged from ichava.com's landing except for relative imports, plus `./react/uui-theme.css`. Untitled UI React's MIT licence ships beside them as `LICENSE-untitledui`. React, react-aria-components and tailwind-merge are optional peers, and the kernel's own entry points import no React. `sideEffects` moves from `false` to `["*.css"]`, so every JavaScript file stays side-effect-free as before and only the new stylesheet is kept when imported. The subpath has its own 1,550-line ceiling and does not count against the core's 1,100; `docs/architecture.md` records the exception to "framework code stays in the packages". `tests/react.test.ts` pins the exports, the package map, the optional peers and the React-free core.
+
+
+- **Canonical copies of the shared frontend tooling** in `config/tools/` (re-audit F-18): `check-consumers.mjs`, `siblings.mjs`/`.d.mts`, `prepaint.mjs`/`.d.mts`, `visual-drift.mjs` and `check-dead-links.mjs` (carried by react-icon-browser and react-landingpage under `scripts/`), and `sync-vendored-library.mjs` (icon-browser and ichava.com, under `.dev/tools/`). They were byte-identical by prose only; each consumer now lists its copies in its own `check:config-drift`, which fails on any difference. Nothing here ships in the package (`files` is `dist`). Change a file here first, then copy it into every consumer.
 
 - The framework-agnostic domain modules shared by the Ichava UI packages: `catalog-model`, `color`, `theme`, `i18n` (an immutable `Translator`), `locale-handoff`, `consent` and `treatment`, plus the `@ichava/js-ui-kernel/build` token-scope step (`scopeTokens`, `globalTokenRules`, `cssRules`, `stripCssComments`, `scopeThemeTokens`).
 - The shared strict TypeScript base (`config/tsconfig.base.json`), the shared ESLint blocks (`config/eslint.base.js`) and the byte-for-byte drift check (`config/check-config-drift.mjs`).
@@ -35,8 +21,17 @@ First release of `@ichava/js-ui-kernel`. The repository is published as a single
 
 ### Changed
 
+- **Documentation links point at each repository's own `docs/`** (Sim, 2026-11-03: "all ichava repos have docs in their respective repos. thats by design"). Links to `opensource.simtabi.com/documentation/ichava/...` and the `opensource.simtabi.com/products/ichava/...` homepage, which answer 404 for every ichava page, now go to the matching `docs/*.md` on GitHub, or to the repository itself. Each target was checked to exist on that repository's `main`. The manifest's `homepage` and `support.docs` follow.
+- **The author and contact address is `ichava@simtabi.com`** (W-11, Sim 2026-11-03), replacing the community address `opensource@simtabi.com` wherever this repository named it. Vulnerability reports still go to `security@simtabi.com`.
+- **The kernel's size ceiling is 1,100 lines, and a test enforces it.** `docs/architecture.md` said the kernel stays under about 700 lines; it measured 1,014 across nine `src/` files, all of it shared contract (the linear CSS scanner, the consent answer, the warm surface ramp, `Icon.path` and `Icon.snippets`). No file is near 700 on its own, so the figure was a whole-kernel one. The stated ceiling now carries the measurement and the reason, and `tests/kernel-size.test.ts` counts `src/` lines (failing when it reads fewer than five files) and checks the documented number matches. No code or export changes.
+
 - **The defaults are lagoon teal (`#0e7c66`) at 6px, and contrast is measured on the warm surfaces.** `DEFAULT_ACCENT` was violet `#7c3aed`; the new `DEFAULT_RADIUS` is 6. The new `SURFACES` names the restyle's warm neutral ramp (sheet, muted fill, frame per theme) that react-icon-browser and react-landingpage paint on; `LANDING_SURFACES` is now that ramp, `PAGE_BG` its first entry, and the browser rule's tint base its frame. `themeVars` derives the three brand text roles from `SURFACES`, so they clear 4.5:1 on every surface and on the accent's tint over each, and the two UI packages can drop the surface lists and text-role overrides they carried. On the old grey surfaces the default teal measured 4.19:1 against the warm frame. `tests/theme.test.ts` checks every offered accent in both themes, and keeps the 2026-10-23 parity table for everything else `themeVars` writes. `FALLBACK_ACCENT_RGB`, the tint an unparseable accent falls back to, moves to the same teal (`14,124,102`), and a test ties it to `DEFAULT_ACCENT`.
 - Node 24 is now the minimum, up from 22. CI tests on Node 24 and 26 (the newest release), and the single-version jobs and the release run on 24, the active LTS. `engines.node` is `>=24`, and the README, installation guide and bug template say so.
+
+### Security
+
+- **The release workflow reads by default and writes only in its one job.** `release.yml` declared `contents: write` for the whole workflow; it is now `contents: read` at the top and `contents: write` on the `release` job. `actions/setup-node` there sets `package-manager-cache: false`, so a release never restores a cache an earlier run could have written (zizmor `cache-poisoning`).
+- **`minimatch` resolves to `^11.0.1` through an npm `overrides` entry.** ESLint 10 and typescript-eslint pull `minimatch` 10.2.x, inside the range of GHSA-g3hv-75wg-m249 (glob-pattern denial of service, `>=7.0.0 <11.0.1`). It is a development dependency only; `npm audit` on a freshly computed lockfile now reports 0 (it reported 10 moderate). No lock file is committed.
 
 ## [Archived history]
 
